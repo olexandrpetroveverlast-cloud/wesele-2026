@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Wesele 16.05.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e0f;
+  --surface: #1a1a1c;
+  --surface2: #232325;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0efe8;
+  --muted: #888784;
+  --hint: #555452;
+  --accent: #c8f060;
+  --accent-dim: rgba(200,240,96,0.12);
+  --red: #ff5c5c;
+  --red-dim: rgba(255,92,92,0.12);
+  --blue: #60a8f0;
+  --blue-dim: rgba(96,168,240,0.12);
+  --green: #5dca91;
+  --green-dim: rgba(93,202,145,0.12);
+  --amber: #f0b860;
+  --amber-dim: rgba(240,184,96,0.12);
+  --purple: #b09cf0;
+  --purple-dim: rgba(176,156,240,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; overscroll-behavior: none; }
+body { display: flex; flex-direction: column; max-width: 430px; margin: 0 auto; }
+
+/* HEADER */
+.hdr { padding: 16px 16px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.hdr-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.hdr-title { font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+.hdr-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.hdr-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); background: var(--accent-dim); padding: 3px 8px; border-radius: 4px; }
+.progress-wrap { display: flex; align-items: center; gap: 10px; }
+.pbar { flex: 1; height: 2px; background: var(--border2); border-radius: 2px; overflow: hidden; }
+.pbar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s cubic-bezier(.4,0,.2,1); width: 0%; }
+.pbar-pct { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); min-width: 30px; text-align: right; }
+
+/* NAV */
+.nav { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.nav-btn { flex: 1; padding: 12px 4px 10px; background: none; border: none; color: var(--hint); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 3px; letter-spacing: .03em; text-transform: uppercase; }
+.nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* PANELS */
+.panels { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.panel { display: none; padding: 12px 14px 80px; }
+.panel.active { display: block; }
+
+/* STATS ROW */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+.stat-val { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.03em; color: var(--text); }
+.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* SECTION LABEL */
+.sec { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--hint); margin: 16px 0 8px; }
+
+/* SHOT CARDS */
+.shot { display: flex; gap: 10px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; cursor: pointer; transition: opacity .2s, background .15s; user-select: none; }
+.shot:active { background: var(--surface2); }
+.shot.done { opacity: .38; }
+.shot.done .shot-title { text-decoration: line-through; }
+.shot-key { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 6px; }
+.shot-key.none { background: transparent; }
+.shot-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--blue); min-width: 42px; padding-top: 2px; }
+.shot-body { flex: 1; }
+.shot-title { font-size: 13px; font-weight: 500; line-height: 1.4; color: var(--text); }
+.shot-note { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+.cams { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.cam { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 4px; font-family: 'DM Mono', monospace; }
+.cam-a { background: var(--blue-dim); color: var(--blue); }
+.cam-s { background: var(--green-dim); color: var(--green); }
+.cam-b { background: var(--purple-dim); color: var(--purple); }
+.cam-g { background: var(--amber-dim); color: var(--amber); }
+
+/* CHECKLIST */
+.chk { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+.chk:last-child { border-bottom: none; }
+.chk:active .chk-box { background: var(--surface2); }
+.chk-box { width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid var(--border2); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.chk-box.on { background: var(--accent); border-color: var(--accent); }
+.chk-box svg { width: 12px; height: 12px; stroke: #0e0e0f; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; display: none; }
+.chk-box.on svg { display: block; }
+.chk-body { flex: 1; }
+.chk-text { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
+.chk-text.done { text-decoration: line-through; color: var(--hint); }
+.chk-sub { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+.pri { display: inline-block; font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .04em; }
+.pri-must { background: var(--red-dim); color: var(--red); }
+.pri-should { background: var(--amber-dim); color: var(--amber); }
+.pri-nice { background: var(--green-dim); color: var(--green); }
+
+/* GEAR */
+.gear-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.gear-row:last-child { border-bottom: none; }
+.gdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.gdot-ok { background: var(--green); }
+.gdot-rent { background: var(--amber); }
+.gdot-opt { background: var(--hint); }
+.gear-name { flex: 1; font-size: 13px; color: var(--text); }
+.gtag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; font-family: 'DM Mono', monospace; white-space: nowrap; }
+.gtag-ok { background: var(--green-dim); color: var(--green); }
+.gtag-rent { background: var(--amber-dim); color: var(--amber); }
+.gtag-opt { color: var(--hint); border: 1px solid var(--border); }
+
+/* LEGEND */
+.legend { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-title">Wesele Janka</div>
+      <div class="hdr-date">16.05.2026 · Warszawa</div>
+    </div>
+    <div class="hdr-time">16:00 – 24:00</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="pbar"><div class="pbar-fill" id="pfill"></div></div>
+    <div class="pbar-pct"><span id="ppct">0</span>%</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('shots',this)">
+    <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+    Shot list
+  </button>
+  <button class="nav-btn" onclick="show('gear',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Sprzęt
+  </button>
+  <button class="nav-btn" onclick="show('prep',this)">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Checklist
+  </button>
+</nav>
+
+<div class="panels">
+
+<!-- SHOT LIST -->
+<div id="shots" class="panel active">
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="sd">0</div><div class="stat-lbl">zrobione</div></div>
+    <div class="stat"><div class="stat-val" id="sl">22</div><div class="stat-lbl">pozostało</div></div>
+  </div>
+
+  <div class="sec">Kościół — al. KEN 101, Ursynów</div>
+
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key"></div><span class="shot-time">16:00</span>
+    <div class="shot-body"><div class="shot-title">Detale kościoła — fasada, ołtarz, kwiaty</div><div class="shot-note">Przed gośćmi. Światło, cisza, atmosfera.</div><div class="cams"><span class="cam cam-s">S5IIX</span><span class="cam cam-g">gimbal</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">16:10</span>
+    <div class="shot-body"><div class="shot-title">Goście wchodzący — twarze, reakcje</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">16:20</span>
+    <div class="shot-body"><div class="shot-title">Pan Młody przy ołtarzu — czekanie</div><div class="shot-note">Szeroki + zbliżenie. Powolny ruch na gimball.</div><div class="cams"><span class="cam cam-s">S5IIX</span><span class="cam cam-g">gimbal</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key"></div><span class="shot-time">~16:30</span>
+    <div class="shot-body"><div class="shot-title">Wejście Panny Młodej nawą</div><div class="shot-note">KLUCZOWY. S5IIX szeroki, A6700 na twarz Pana Młodego.</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Przysięga i obrączki</div><div class="shot-note">Mikrofon kierunkowy jak najbliżej. Zbliżenie rąk.</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Pocałunek</div><div class="shot-note">S5IIX szeroki, A6700 na reakcje gości.</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Wyjście z kościoła — ryż, gratulacje</div><div class="shot-note">Z ręki, dynamicznie. Sprawdź kierunek słońca.</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+
+  <div class="sec">Przejazd → Reduta Banku Polskiego, ul. Bielańska 10</div>
+
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Przyjazd auta — para przed budynkiem</div><div class="shot-note">Historyczny budynek jako tło. Gimbal.</div><div class="cams"><span class="cam cam-s">S5IIX</span><span class="cam cam-g">gimbal</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Powitanie chlebem i solą (jeśli będzie)</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+
+  <div class="sec">Sala weselna</div>
+
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Detale sali — nakrycia, kwiaty, dekoracje</div><div class="shot-note">Nagraj zanim goście zajmą miejsca.</div><div class="cams"><span class="cam cam-s">S5IIX</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Pierwszy taniec</div><div class="shot-note">KLUCZOWY. S5IIX szeroki, A6700 zbliżenia. Gimbal.</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Toasty / mowy</div><div class="shot-note">Mikrofon kierunkowy. Filmuj też reakcje słuchaczy.</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Taniec rodziców z parą</div><div class="cams"><span class="cam cam-s">S5IIX</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Goście tańczący — spontan, emocje</div><div class="shot-note">Z ręki, dynamicznie. Bez gimbala na parkiecie.</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+
+  <div class="sec">Tradycja (potwierdzić z Jankiem)</div>
+
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key"></div><span class="shot-time">~23:00</span>
+    <div class="shot-body"><div class="shot-title">Oczepiny</div><div class="shot-note">Bardzo dynamiczne — przygotuj się zawczasu.</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Rzut bukietem i podwiązką</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">—</span>
+    <div class="shot-body"><div class="shot-title">Krojenie tortu (jeśli będzie)</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+
+  <div class="sec">Przez cały wieczór</div>
+
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">∞</span>
+    <div class="shot-body"><div class="shot-title">Cutaways — świece, szkła, kwiaty, detale</div><div class="shot-note">Materiał montażowy. Im więcej tym lepiej.</div><div class="cams"><span class="cam cam-s">S5IIX</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">∞</span>
+    <div class="shot-body"><div class="shot-title">Reakcje gości — śmiech, łzy, przytulenia</div><div class="cams"><span class="cam cam-a">A6700</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">∞</span>
+    <div class="shot-body"><div class="shot-title">Para — spontaniczne momenty, spojrzenia</div><div class="cams"><span class="cam cam-b">obie kamery</span></div></div>
+  </div>
+  <div class="shot" onclick="toggleShot(this)">
+    <div class="shot-key none"></div><span class="shot-time">∞</span>
+    <div class="shot-body"><div class="shot-title">Nadgodziny do 24:30 (jeśli potrzeba)</div><div class="shot-note">+100 zł — wpisane w umowę.</div></div>
+  </div>
+</div>
+
+<!-- GEAR -->
+<div id="gear" class="panel">
+  <div class="legend">
+    <span class="leg"><span class="leg-dot" style="background:var(--green)"></span>masz</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--amber)"></span>wypożycz / dokup</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--hint)"></span>opcjonalnie</span>
+  </div>
+
+  <div class="sec">Kamery</div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">Sony A6700 — A cam (główna)</span><span class="gtag gtag-ok">masz</span></div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">Lumix S5IIX — B cam</span><span class="gtag gtag-ok">masz</span></div>
+
+  <div class="sec">Obiektywy</div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">9mm E-mount</span><span class="gtag gtag-ok">masz</span></div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">18-50mm E-mount — główna robocza</span><span class="gtag gtag-ok">masz</span></div>
+  <div class="gear-row"><span class="gdot gdot-rent"></span><span class="gear-name">70-200mm — kościół, zbliżenia</span><span class="gtag gtag-rent">wypożycz</span></div>
+  <div class="gear-row"><span class="gdot gdot-opt"></span><span class="gear-name">Lumix S 20-60mm (do S5IIX)</span><span class="gtag gtag-opt">opcja</span></div>
+
+  <div class="sec">Stabilizacja / audio</div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">DJI RS4 Mini</span><span class="gtag gtag-ok">masz</span></div>
+  <div class="gear-row"><span class="gdot gdot-rent"></span><span class="gear-name">Mikrofon kierunkowy shotgun</span><span class="gtag gtag-rent">wypożycz</span></div>
+  <div class="gear-row"><span class="gdot gdot-opt"></span><span class="gear-name">Lavalier ×2 + rejestrator Zoom</span><span class="gtag gtag-opt">opcja</span></div>
+
+  <div class="sec">Zasilanie</div>
+  <div class="gear-row"><span class="gdot gdot-rent"></span><span class="gear-name">Baterie NP-FZ100 ×3 (A6700)</span><span class="gtag gtag-rent">dokup</span></div>
+  <div class="gear-row"><span class="gdot gdot-rent"></span><span class="gear-name">Baterie S5IIX ×2</span><span class="gtag gtag-rent">dokup</span></div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">Powerbank RS4 Mini + ładowarki</span><span class="gtag gtag-ok">masz</span></div>
+
+  <div class="sec">Karty / storage</div>
+  <div class="gear-row"><span class="gdot gdot-rent"></span><span class="gear-name">SD/CFexpress 2×128GB per kamera</span><span class="gtag gtag-rent">sprawdź</span></div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">SSD backup na miejscu</span><span class="gtag gtag-ok">masz</span></div>
+
+  <div class="sec">Inne</div>
+  <div class="gear-row"><span class="gdot gdot-opt"></span><span class="gear-name">Małe LED on-camera (ciemna sala)</span><span class="gtag gtag-opt">opcja</span></div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">Elegancki strój, ciemny kolor</span><span class="gtag gtag-ok">przygotuj</span></div>
+  <div class="gear-row"><span class="gdot gdot-ok"></span><span class="gear-name">Woda + przekąska na wieczór</span><span class="gtag gtag-ok">weź</span></div>
+</div>
+
+<!-- CHECKLIST -->
+<div id="prep" class="panel">
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="cd">0</div><div class="stat-lbl">gotowe</div></div>
+    <div class="stat"><div class="stat-val" id="cl">17</div><div class="stat-lbl">pozostało</div></div>
+  </div>
+
+  <div class="sec">Do zamówienia / wypożyczenia</div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Obiektyw 70-200mm<span class="pri pri-must">must</span></div><div class="chk-sub">Optekpol lub inna wypożyczalnia Warszawa</div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Mikrofon kierunkowy shotgun<span class="pri pri-must">must</span></div><div class="chk-sub">Rode VideoMicro II / Sennheiser MKE 400</div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Baterie NP-FZ100 ×2 (A6700)<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Baterie do S5IIX ×2<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Karty 2×128GB per kamera<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Obiektyw do S5IIX (S 20-60mm)<span class="pri pri-should">should</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">LED on-camera<span class="pri pri-should">should</span></div><div class="chk-sub">Ciemna sala weselna wieczorem</div></div>
+  </div>
+
+  <div class="sec">Dzień przed</div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Rekonesans Street View — obie lokacje<span class="pri pri-must">must</span></div><div class="chk-sub">al. KEN 101 + ul. Bielańska 10 — wejście, światło</div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Kalibracja RS4 Mini pod S5IIX<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Test audio z mikrofonem<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Color profile obie kamery (Log / Cine D)<span class="pri pri-must">must</span></div><div class="chk-sub">Ten sam LUT — muszą pasować w montażu</div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Naładuj wszystkie baterie<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Sformatuj karty pamięci<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Przygotuj strój (elegancki, ciemny)<span class="pri pri-should">should</span></div></div>
+  </div>
+
+  <div class="sec">W dniu zdjęciowym</div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Przyjedź 30 min przed — detale kościoła<span class="pri pri-must">must</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Backup kart na SSD po kościele<span class="pri pri-should">should</span></div></div>
+  </div>
+  <div class="chk" onclick="toggleChk(this)">
+    <div class="chk-box"><svg viewBox="0 0 14 14"><polyline points="2,7 5.5,11 12,3"/></svg></div>
+    <div class="chk-body"><div class="chk-text">Zjedz porządnie przed wyjściem<span class="pri pri-should">should</span></div><div class="chk-sub">8h bez pewności kiedy będzie przerwa</div></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const SHOTS = 22, CHKS = 17;
+
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleShot(el) {
+  el.classList.toggle('done');
+  const done = document.querySelectorAll('#shots .shot.done').length;
+  document.getElementById('sd').textContent = done;
+  document.getElementById('sl').textContent = SHOTS - done;
+  updateProgress();
+}
+
+function toggleChk(el) {
+  const box = el.querySelector('.chk-box');
+  const txt = el.querySelector('.chk-text');
+  box.classList.toggle('on');
+  txt.classList.toggle('done', box.classList.contains('on'));
+  const done = document.querySelectorAll('#prep .chk-box.on').length;
+  document.getElementById('cd').textContent = done;
+  document.getElementById('cl').textContent = CHKS - done;
+  updateProgress();
+}
+
+function updateProgress() {
+  const sd = document.querySelectorAll('#shots .shot.done').length;
+  const cd = document.querySelectorAll('#prep .chk-box.on').length;
+  const pct = Math.round((sd + cd) / (SHOTS + CHKS) * 100);
+  document.getElementById('pfill').style.width = pct + '%';
+  document.getElementById('ppct').textContent = pct;
+}
+</script>
+</body>
+</html>
